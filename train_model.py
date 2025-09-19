@@ -1,25 +1,30 @@
+# train_model.py
+
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
+# Import RandomForestRegressor instead of LinearRegression
+from sklearn.ensemble import RandomForestRegressor
 import joblib
 
-# Load the dataset
+# 1. Load the dataset
+print("Loading data...")
 df = pd.read_csv('USA_Housing.csv')
 
-# Define features (X) and target (y)
+# 2. Prepare the data
 features = ['Avg. Area Income', 'Avg. Area House Age', 'Avg. Area Number of Rooms', 'Avg. Area Number of Bedrooms', 'Area Population']
 target = 'Price'
 X = df[features]
 y = df[target]
 
-# Split data
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Train the model
-model = LinearRegression()
+# 3. Choose and train the new model
+# We are now using RandomForestRegressor with 100 decision trees
+print("Training Random Forest model...")
+model = RandomForestRegressor(n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
+print("Model training complete.")
 
-# Save the trained model
+# 4. Save the trained model (this will overwrite the old one)
 joblib.dump(model, 'house_price_model.pkl')
-
-print("Model has been trained and saved as house_price_model.pkl")
+print("New Random Forest model saved to house_price_model.pkl")
